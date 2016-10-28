@@ -1,0 +1,33 @@
+{
+  "name": "easyperm",
+  "version": "0.1.0",
+  "description": "easy permission validation library with easy api",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
+  },
+  "author": "Qiaosen Huang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joesonw/easyperm.git"
+  },
+  "keywords": [
+    "permision",
+    "ugo",
+    "permission"
+  ],
+  "bugs": {
+    "url": "https://github.com/joesonw/easyperm/issues"
+  },
+  "homepage": "https://github.com/joesonw/easyperm#readme",
+  "dependencies": {
+    "lodash": "^4.16.4"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2"
+  }
+}
