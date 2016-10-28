@@ -2,7 +2,7 @@
   "name": "easyperm",
   "version": "0.1.0",
   "description": "easy permission validation library with easy api",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
     "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
@@ -14,8 +14,8 @@
     "url": "git+https://github.com/joesonw/easyperm.git"
   },
   "keywords": [
-    "permision",
-    "ugo",
+    "joi",
+	"validate",
     "permission"
   ],
   "bugs": {
