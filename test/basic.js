@@ -2,7 +2,7 @@
 * @Author: Qiaosen Huang
 * @Date:   2016-10-28 11:23:15
 * @Last Modified by:   Qiaosen Huang
-* @Last Modified time: 2016-10-28 14:43:38
+* @Last Modified time: 2016-10-28 16:17:05
 */
 
 'use strict';
@@ -12,6 +12,7 @@ const assert = require('chai').assert;
 
 const user =  {
     id: 1234,
+    roles: ['admin', 'user'],
     info: {
         age: 30,
     }
@@ -45,5 +46,8 @@ describe('test basic if statement', () => {
     });
     it('should validate nin', () => {
         assert.equal(new Rule().if('id').nin([1, 2, 3, 4]).validate(user), true);
+    });
+    it('should validate contains', () => {
+        assert.equal(new Rule().if('roles').contains('admin').validate(user), true);
     });
 });

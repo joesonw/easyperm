@@ -2,7 +2,7 @@
 * @Author: Qiaosen Huang
 * @Date:   2016-10-28 11:23:15
 * @Last Modified by:   Qiaosen Huang
-* @Last Modified time: 2016-10-28 15:27:09
+* @Last Modified time: 2016-10-28 16:27:51
 */
 
 'use strict';
@@ -13,6 +13,7 @@ const assert = require('chai').assert;
 const user =  {
     id: 1234,
     age: 30,
+    roles: ['admin', 'user'],
 };
 
 const resource = {
@@ -24,44 +25,48 @@ const resource = {
 
 
 describe('test with referenced keys', () => {
-    it('should validate eq', () => {
+    it('should validate eqKey', () => {
         assert.equal(new Rule().if('user.id').eqKey('resource.userId')
-            .validateWith({ user: user, resource: resource }), true);
+            .validate({ user: user, resource: resource }), true);
     });
     it('should not validate ne', () => {
         assert.equal(new Rule().if('user.id').eqKey('resource.age20')
-            .validateWith({ user: user, resource: resource }), false);
+            .validate({ user: user, resource: resource }), false);
     });
-    it('should validate ne', () => {
+    it('should validate neKey', () => {
         assert.equal(new Rule().if('user.id').neKey('resource.userId')
-            .validateWith({ user: user, resource: resource }), false);
+            .validate({ user: user, resource: resource }), false);
     });
-    it('should validate gt', () => {
+    it('should validate gtKey', () => {
        assert.equal(new Rule().if('user.age').gtKey('resource.age20')
-            .validateWith({ user: user, resource: resource }), true);
+            .validate({ user: user, resource: resource }), true);
     });
-    it('should validate gte', () => {
+    it('should validate gteKey', () => {
         assert.equal(new Rule().if('user.age').gteKey('resource.age30')
-            .validateWith({ user: user, resource: resource }), true);
+            .validate({ user: user, resource: resource }), true);
     });
-    it('should validate lt', () => {
+    it('should validate ltKey', () => {
         assert.equal(new Rule().if('user.age').ltKey('resource.age30')
-            .validateWith({ user: user, resource: resource }), false);
+            .validate({ user: user, resource: resource }), false);
     });
-    it('should validate lte', () => {
+    it('should validate lteKey', () => {
         assert.equal(new Rule().if('user.age').lteKey('resource.age30')
-            .validateWith({ user: user, resource: resource }), true);
+            .validate({ user: user, resource: resource }), true);
     });
-    it('should validate in', () => {
+    it('should validate inKey', () => {
         assert.equal(new Rule().if('user.id').inKey('resource.userIds')
-            .validateWith({ user: user, resource: resource }), true);
+            .validate({ user: user, resource: resource }), true);
     });
-    it('should validate nin', () => {
+    it('should validate ninKey', () => {
         assert.equal(new Rule().if('user.id').ninKey('resource.userIds')
-            .validateWith({ user: user, resource: resource }), false);
+            .validate({ user: user, resource: resource }), false);
     });
-    it('should validate non-reference value', () => {
+    it('should validate containsKey', () => {
+        assert.equal(new Rule().if('resource.userIds').containsKey('user.id')
+            .validate({ user: user, resource: resource }), true);
+    })
+    it('should validate nonKey-reference value', () => {
         assert.equal(new Rule().if('user.id').eq(1234)
-            .validateWith({ user: user, resource: resource }), true);
+            .validate({ user: user, resource: resource }), true);
     });
 });

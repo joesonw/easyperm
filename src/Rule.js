@@ -2,7 +2,7 @@
 * @Author: Qiaosen Huang
 * @Date:   2016-10-28 11:34:46
 * @Last Modified by:   Qiaosen Huang
-* @Last Modified time: 2016-10-28 15:51:04
+* @Last Modified time: 2016-10-28 16:28:06
 */
 
 'use strict';
@@ -15,6 +15,7 @@ const RuleConditionMethods = [
     'lte',
     'eq',
     'ne',
+    'contains',
 
     'gtKey',
     'gteKey',
@@ -22,6 +23,7 @@ const RuleConditionMethods = [
     'lteKey',
     'eqKey',
     'neKey',
+    'containsKey',
 
     'in',
     'nin',
@@ -32,6 +34,7 @@ const RuleConditionMethods = [
 const RuleConditionLogicMethods = [
     'or',
     'and',
+    'not',
 ];
 
 function Rule() {
@@ -78,6 +81,8 @@ Rule.prototype._validate = function _validate(lhs, operator, rhs) {
             return rhs.indexOf(lhs) !== -1;
         case 'nin':
             return rhs.indexOf(lhs) === -1;
+        case 'contains':
+            return lhs.indexOf(rhs) !== -1;
     }
 }
 
@@ -88,6 +93,8 @@ Rule.prototype._recursiveParse = function (rule, parse) {
             return result.length === result.filter(bool => bool).length;
         case 'or':
             return result.filter(bool => bool).length > 0;
+        case 'not':
+            return result.filter(bool => bool).length === 0;
     }
 }
 
@@ -115,6 +122,8 @@ Rule.prototype.validate = function (item) {
                     return flag || result;
                 case 'and':
                     return flag && result;
+                case 'not':
+                    return flag && result;
             }
         }
         return flag;
@@ -124,37 +133,6 @@ Rule.prototype.validate = function (item) {
     return parse(this._query);
 }
 
-Rule.prototype.validateWith = function (items) {
-    const parse = (query) => {
-        let flag = true;
-        const normalQuery = query.filter(q => !q.logic);
-        const logicQuery = query.filter(q => q.logic);
-        
-        for (const rule of normalQuery) {
-            const lhs = _.get(items, rule.key);
-            if (rule.operator.substr(-3) === 'Key') {
-                if (!this._validate(lhs, rule.operator.substr(0, rule.operator.length - 3), _.get(items, rule.value))) {
-                    flag = false;
-                }
-            } else {
-                if (!this._validate(lhs, rule.operator, rule.value)) {
-                    flag = false;
-                }
-            }
-        }
-        for (const rule of logicQuery) {
-            const result = this._recursiveParse(rule, parse);
-            switch (rule.operator) {
-                case 'or':
-                    return flag || result;
-                case 'and':
-                    return flag && result;
-            }
-        }
-        return flag;
-    }
-    return parse(this._query);
-}
 
 function RuleCondition(key, query) {
     this._key = key;

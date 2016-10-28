@@ -2,7 +2,7 @@
 * @Author: Qiaosen Huang
 * @Date:   2016-10-28 11:23:15
 * @Last Modified by:   Qiaosen Huang
-* @Last Modified time: 2016-10-28 15:53:05
+* @Last Modified time: 2016-10-28 16:28:25
 */
 
 'use strict';
@@ -13,6 +13,7 @@ const assert = require('chai').assert;
 const user =  {
     id: 1234,
     age: 30,
+    roles: ['admin', 'user'],
 };
 
 const resource = {
@@ -59,12 +60,19 @@ describe('test logic operators', () => {
             ).validate(user), true);
     });
 
+    it('should validate not-1', () => {
+        assert.equal(new Rule().not(
+            new Rule().if('id').eq(1),
+            new Rule().if('id').eq(2)
+        ).validate(user), true);
+    });
+
     it('should work with references-1', () => {
         assert.equal(new Rule().and(
             new Rule().if('user.id').eqKey('resource.userId'),
             new Rule().if('user.age').eqKey('resource.age30')
         )
-        .validateWith({ user: user, resource: resource }),
+        .validate({ user: user, resource: resource }),
         true);
     });
 
@@ -72,7 +80,7 @@ describe('test logic operators', () => {
         assert.equal(new Rule().if('user.age').eqKey('resource.userId').or(
             new Rule().if('user.id').eq(1234)
         )
-        .validateWith({ user: user, resource: resource }),
+        .validate({ user: user, resource: resource }),
         true);
     });
 
